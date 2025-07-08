@@ -40,7 +40,7 @@
 
       <table class="w-full">
         <thead class="bg-gray-100 ">
-          <tr class="flex justify-between items-center pr-15">
+          <tr>
             <th class="p-3 text-left">Name</th>
             <th class="p-3 text-left">Image</th>
             <th class="p-3 text-left">Actions</th>
@@ -48,7 +48,7 @@
         </thead>
 
         <tbody>
-          <tr class="border-b flex justify-between  items-center" v-for="(brand, index ) in brands" :key="index">
+          <tr class="border-b " v-for="(brand, index ) in brands" :key="index">
             <td class="p-3">{{brand.name}}</td>
 
             <td class="p-3"><img :src ="brand.image" alt="Brand Image" 

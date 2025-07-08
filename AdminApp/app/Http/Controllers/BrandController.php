@@ -15,7 +15,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all();
+        $brands = Brand::latest()->get();
         return Inertia::render('Brands/BrandList',['brands' => $brands]);
     }
 

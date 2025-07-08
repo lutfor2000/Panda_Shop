@@ -69,7 +69,7 @@
 <template>
     <Layout>
           <!-- Main Content -->
-            <main class="ml-64 p-8">
+            <main class="ml-64 p-8 lg:min-w-[1460px] sm:min-w-[500px] md:min-w-[768px]">
                 <h2 class="text-2xl font-bold mb-6">Brand Edit</h2>
                 <form class="bg-white shadow-md rounded-lg p-6" @submit.prevent="submitForm">
 

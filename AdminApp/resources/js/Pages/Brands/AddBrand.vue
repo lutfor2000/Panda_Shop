@@ -47,8 +47,8 @@
 <template>
     <Layout>
           <!-- Main Content -->
-            <main class="ml-64 p-8 w-full flex  justify-center">
-               <div class="w-[1600px] sm:min-w-[600px] md:min-w-[768px]">
+            <main class="ml-64 p-8 lg:min-w-[1460px] sm:min-w-[500px] md:min-w-[768px]">
+        
                    <h2 class="text-2xl font-bold mb-6">Add Brand</h2>
                 <form class="bg-white shadow-md rounded-lg p-6" @submit.prevent="submitForm">
 
@@ -69,7 +69,7 @@
 
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Brand</button>
                 </form>
-               </div>
+              
             </main>
     </Layout>
 </template>
