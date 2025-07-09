@@ -62,9 +62,9 @@ class CategoryController extends Controller
                     $data['image'] = $filePath;
             }
             
-            Category::create($data);
+            $Category = Category::create($data);
 
-             return redirect()->route('categories.index')->with('success', 'Categories created successfully');
+             return redirect()->route('categories.index')->with('success', 'Category'." "."{$Category->name}"." ".'Created successfully');
         }
         catch(Exception $th){
 
@@ -127,8 +127,8 @@ class CategoryController extends Controller
         }
 
             $category->save();
-
-            return redirect()->route('categories.index')->with('success', 'Category updated successfully');
+            //-----Message Pass Category Name---
+            return redirect()->route('categories.index')->with('success', 'Category'." "."{$category->name}"." ".'updated successfully');
     }
 
     /**
@@ -144,6 +144,6 @@ class CategoryController extends Controller
             }
 
             $category->delete();
-             return redirect()->route('categories.index')->with('success', 'Category Delete successfully');
+             return redirect()->route('categories.index')->with('success', 'Category'." "."{$category->name}"." ".'Delete success');
     }
 }
