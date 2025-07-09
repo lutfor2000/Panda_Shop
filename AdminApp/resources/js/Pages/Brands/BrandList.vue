@@ -1,7 +1,7 @@
 <script setup>
+    import { Link, router, useForm, usePage } from '@inertiajs/vue3';
     import { onMounted, computed } from 'vue';
     import Layout from '../Shared/Layout.vue';
-    import { Link, router, useForm, usePage } from '@inertiajs/vue3';
     import { useToast } from 'vue-toastification';
 
  
@@ -13,8 +13,8 @@
     });
 
 //============Brands Item Delete===============================
-    const deleteBrand = (id) =>{
-       router.delete(`brands/${id}`,{
+    const deleteBrand = (encrypted_id) =>{
+       router.delete(`brands/${encrypted_id}`,{
           onSuccess: () =>{
               flash.value.success && toast.success(flash.value.success);
               flash.value.error && toast.error(flash.value.error);
@@ -55,8 +55,8 @@
               class="w-10 h-10 rounded-full"></td>
 
             <td class="p-3 space-x-2">
-              <Link :href="`brands/${brand.id}/edit`" class="bg-yellow-500 text-white px-2 py-1 rounded-md">Edit</Link>
-              <button class="bg-red-500 text-white px-2 py-1 rounded-md" @click="deleteBrand(brand.id)">Delete</button>
+              <Link :href="`brands/${brand.encrypted_id}/edit`" class="bg-yellow-500 text-white px-2 py-1 rounded-md">Edit</Link>
+              <button class="bg-red-500 text-white px-2 py-1 rounded-md" @click="deleteBrand(brand.encrypted_id)">Delete</button>
             </td>
           </tr>
           <!-- Repeat for other brands -->
@@ -65,7 +65,7 @@
       </table>
 
     </div>
-  </main>
+    </main>
 
     </Layout>
 </template>

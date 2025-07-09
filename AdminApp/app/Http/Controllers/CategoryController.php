@@ -3,28 +3,29 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Integer;
 use Inertia\Inertia;
-use App\Models\Brand;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
 use Exception;
 
-class BrandController extends Controller
+
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       
-         $brands = Brand::latest()->get()->map(function ($brand) {
+
+        $categories = Category::latest()->get()->map(function ($category) {
                 return [
-                    'name' => $brand->name,
-                    'image' => $brand->image,
-                    'encrypted_id' => Crypt::encrypt($brand->id), // ✅ ইনক্রিপ্ট করা ID
+                    'name' => $category->name,
+                    'image' => $category->image,
+                    'encrypted_id' => Crypt::encrypt($category->id), // ✅ ইনক্রিপ্ট করা ID
                 ];
         });
 
-        return Inertia::render('Brands/BrandList',['brands' => $brands]);
+        return Inertia::render('Categories/CategoryList',['categories' => $categories]);
     }
 
     /**
@@ -32,7 +33,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Brands/AddBrand');
+        return Inertia::render('Categories/AddCategory');
     }
 
     /**
@@ -40,7 +41,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-         try{ //<--error check start
+       try{ //<--error check start
 
             //--Validation Check-----
            $request->validate([
@@ -56,26 +57,20 @@ class BrandController extends Controller
             if($request->hasFile('image')){
                     $image = $request->file('image');
                     $fileName = time().'.'.$image->getClientOriginalExtension();
-                    $filePath = 'uploads/brands/'.$fileName;
-                    $image->move(public_path('uploads/brands/'), $fileName);
+                    $filePath = 'uploads/categories/'.$fileName;
+                    $image->move(public_path('uploads/categories/'), $fileName);
                     $data['image'] = $filePath;
             }
             
-            Brand::create($data);
+            Category::create($data);
 
-             return redirect()->route('brands.index')->with('success', 'Brand created successfully');
+             return redirect()->route('categories.index')->with('success', 'Categories created successfully');
         }
         catch(Exception $th){
 
             return redirect()->back()->with('error', $th->getMessage());
 
         }//<--error Check
-
-
-
-
-
-
     }
 
     /**
@@ -90,11 +85,11 @@ class BrandController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {      
+    {
         $id = Crypt::decrypt($id);
-        $brand = Brand::findOrFail($id);
-        return Inertia::render('Brands/EditBrand',['brand' => $brand]);
-        
+       
+        $category = Category::findOrFail($id);
+        return Inertia::render('Categories/EditCategory',['category'=> $category]);
     }
 
     /**
@@ -102,20 +97,20 @@ class BrandController extends Controller
      */
     public function update(Request $request, string $id)
     {
-            $request->validate([
+         $request->validate([
                 'name' => 'required|string|max:255',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
+            
+             $category = Category::findOrFail($id);
 
-             $brand = Brand::findOrFail($id);
-
-             $brand->name = $request->name;
+             $category->name = $request->name;
        
         if($request->hasFile('image')){
             
-            if($brand->image && file_exists(public_path($brand->image))){
-                unlink(public_path($brand->image));
+            if($category->image && file_exists(public_path($category->image))){
+                unlink(public_path($category->image));
             }
 
             $request->validate([
@@ -125,15 +120,15 @@ class BrandController extends Controller
             $image = $request->file('image');
 
             $fileName = time().'.'.$image->getClientOriginalExtension();
-            $filePath = 'uploads/brands/'.$fileName;
+            $filePath = 'uploads/categories/'.$fileName;
 
-            $image->move(public_path('uploads/brands/'), $fileName);
-            $brand->image = $filePath;
+            $image->move(public_path('uploads/categories/'), $fileName);
+            $category->image = $filePath;
         }
 
-            $brand->save();
+            $category->save();
 
-            return redirect()->route('brands.index')->with('success', 'Brand updated successfully');
+            return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -142,13 +137,13 @@ class BrandController extends Controller
     public function destroy(string $encrypted_id)
     {
             $id = Crypt::decrypt($encrypted_id);
-            $brand = Brand::findOrFail($id);
+            $category = Category::findOrFail($id);
 
-            if($brand->image && file_exists(public_path($brand->image))){
-                unlink(public_path($brand->image));
+            if($category->image && file_exists(public_path($category->image))){
+                unlink(public_path($category->image));
             }
 
-            $brand->delete();
-             return redirect()->route('brands.index')->with('success', 'Brand Delete successfully');
+            $category->delete();
+             return redirect()->route('categories.index')->with('success', 'Category Delete successfully');
     }
 }

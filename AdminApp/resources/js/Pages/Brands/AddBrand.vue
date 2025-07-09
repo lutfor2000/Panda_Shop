@@ -15,6 +15,7 @@
         image : null
     });
 
+//===============Changing the image will show a new preview=============
     const handleImage = (event) =>{
         const file = event.target.files[0];       
          if (file) {
@@ -23,6 +24,7 @@
         }
     }
 
+//=================Form Submit==============
     const submitForm = () =>{
       if(form.name.length === 0){
            toast.warning("Name is required");
