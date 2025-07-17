@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->boolean('is_discount')->default(false);
             $table->decimal('discount_price', 8, 2)->nullable();
-            $table->string('image', 200);
+            $table->string('image', 200)->nullable();
             $table->boolean('in_stock')->default(true);
             $table->integer('stock')->default(0);
             $table->float('star')->default(0);

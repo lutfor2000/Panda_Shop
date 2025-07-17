@@ -3,6 +3,7 @@
     import { onMounted, computed } from 'vue';
     import Layout from '../Shared/Layout.vue';
     import { useToast } from 'vue-toastification';
+    import TableComponent from '../../Components/TableComponent.vue';
 
     const toast = useToast();
     const flash = computed(() => usePage().props.flash);
@@ -24,6 +25,14 @@
        })
     }
 
+
+ const columns = [
+      { key: 'id', label: 'ID', slot: 'id-slot', searchable: true, sortable: true },
+      { key: 'name', label: 'Name', searchable: true, sortable: true },
+      { key: 'image', label: 'Image', slot: 'image-slot', searchable: false, sortable: false },
+      { key: 'actions', label: 'Actions', slot: 'actions-slot', searchable: false, sortable: false }
+  ];
+
 </script>
 
 <template>
@@ -33,33 +42,31 @@
         <h2 class="text-2xl font-bold">Categories</h2>
         <Link href="/categories/create" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Category</Link>
         </div>
+
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
+ 
+     <TableComponent :data="categories" :columns="columns" :page-size="5">
 
-        <table class="w-full">
-            <thead class="bg-gray-100 ">
-            <tr>
-                <th class="p-3 text-left">Name</th>
-                <th class="p-3 text-left">Image</th>
-                <th class="p-3 text-left">Actions</th>
-            </tr>
-            </thead>
+        <template #id-slot="{ row }">
+            <span class="font-bold text-gray-700">{{ row.decrypted_id }}</span>
+        </template>
+        
+        <template #image-slot="{ row }">
+              <img :src="row.image" alt="Brand Image" class="w-10 h-10 rounded-full">
+        </template>
 
-            <tbody>
-            <tr class="border-b " v-for="(category, index ) in categories" :key="index">
-                <td class="p-3">{{category.name}}</td>
+        <template #actions-slot="{ row }">
+            <div class="space-x-2">
+                <Link :href="`categories/${row.encrypted_id}/edit`" class="bg-yellow-500 text-white px-2 py-1 rounded-md">
+                  Edit
+                </Link>
+                <button @click="CategoryDelete(row.encrypted_id)" class="bg-red-500 text-white px-2 py-1 rounded-md">
+                    Delete
+                </button>
+            </div>
+        </template>
 
-                <td class="p-3"><img :src ="category.image" alt="Brand Image" 
-                class="w-10 h-10 rounded-full"></td>
-
-                <td class="p-3 space-x-2">
-                <Link :href="`/categories/${category.encrypted_id}/edit `" class="bg-yellow-500 text-white px-2 py-1 rounded-md">Edit</Link>
-                <button class="bg-red-500 text-white px-2 py-1 rounded-md" @click="CategoryDelete(category.encrypted_id)">Delete</button>
-                </td>
-            </tr>
-            <!-- Repeat for other brands -->
-            </tbody>
-
-        </table>
+     </TableComponent>
 
         </div>
         </main>

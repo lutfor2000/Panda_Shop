@@ -18,4 +18,9 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+
+     public function details()
+    {
+        return $this->hasOne(ProductDetail::class);
+    }
 }

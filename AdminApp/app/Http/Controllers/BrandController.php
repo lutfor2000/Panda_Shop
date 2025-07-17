@@ -20,7 +20,8 @@ class BrandController extends Controller
                 return [
                     'name' => $brand->name,
                     'image' => $brand->image,
-                    'encrypted_id' => Crypt::encrypt($brand->id), // ✅ ইনক্রিপ্ট করা ID
+                    'encrypted_id' => Crypt::encrypt($brand->id),
+                    'decrypted_id' => $brand->id,
                 ];
         });
 
@@ -61,9 +62,9 @@ class BrandController extends Controller
                     $data['image'] = $filePath;
             }
             
-            Brand::create($data);
+           $brand = Brand::create($data);
 
-             return redirect()->route('brands.index')->with('success', 'Brand created successfully');
+             return redirect()->route('brands.index')->with('success', "Brand"." "."{$brand->name}"." "."created successfully");
         }
         catch(Exception $th){
 
@@ -133,7 +134,7 @@ class BrandController extends Controller
 
             $brand->save();
 
-            return redirect()->route('brands.index')->with('success', 'Brand updated successfully');
+            return redirect()->route('brands.index')->with('success', "Brand"." "."{$brand->name}"." "."update successfully");
     }
 
     /**
@@ -149,6 +150,7 @@ class BrandController extends Controller
             }
 
             $brand->delete();
-             return redirect()->route('brands.index')->with('success', 'Brand Delete successfully');
+            
+            return redirect()->route('brands.index')->with('success', "Brand"." "."{$brand->name}"." "."delete successfully");
     }
 }

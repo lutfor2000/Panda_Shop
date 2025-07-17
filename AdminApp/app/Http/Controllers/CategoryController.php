@@ -21,7 +21,8 @@ class CategoryController extends Controller
                 return [
                     'name' => $category->name,
                     'image' => $category->image,
-                    'encrypted_id' => Crypt::encrypt($category->id), // ✅ ইনক্রিপ্ট করা ID
+                    'encrypted_id' => Crypt::encrypt($category->id),
+                    'decrypted_id' => $category->id,
                 ];
         });
 

@@ -65,8 +65,7 @@
                 </div>
 
                 <div class="mb-4 text-center">
-                    <img :src="CategoryImage" alt=""
-                        class="w-25 h-25 rounded-full mb-2">
+                    <img v-if="CategoryImage" :src="CategoryImage" alt="Category Image" class="w-25 h-25 rounded-md mb-2">
                 </div>
 
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Category</button>
