@@ -32,7 +32,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() 
     {
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();

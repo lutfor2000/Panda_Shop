@@ -10,6 +10,6 @@
 
     <!-- Main Content -->
      <slot/>
-  </div>
+  </div> 
 
 </template>

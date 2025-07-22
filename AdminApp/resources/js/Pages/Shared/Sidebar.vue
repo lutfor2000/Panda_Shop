@@ -1,3 +1,10 @@
+<script setup>
+    import { Link } from '@inertiajs/vue3'
+    const userDropDown = ref(false)
+
+</script>
+
+
 <template>
 
     <aside class="w-64 bg-gray-800 text-white h-screen fixed">
@@ -19,6 +26,3 @@
     
 </template>
 
-<script setup>
-    import { Link } from '@inertiajs/vue3'
-</script>
