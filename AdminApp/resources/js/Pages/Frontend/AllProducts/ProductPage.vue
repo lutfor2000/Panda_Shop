@@ -1,5 +1,63 @@
 <script setup>
-import UserLayout from '../../Shared/Frontend/UserLayout.vue';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import UserLayout from '../../Shared/Frontend/UserLayout.vue';
+    import ProductCard from '../../../Components/Frontend/ProductCard.vue';
+   
+
+    const search = ref('');
+    const selectedCategories = ref([]);
+    const selectedBrands = ref([]);
+    const min_price = ref(null)
+    const max_price = ref(null)
+
+
+
+   const filterProducts = () => {
+        router.get('/allproducts', {
+            search: search.value,
+            categories: selectedCategories.value,
+            brands: selectedBrands.value,
+            min_price: min_price.value,
+            max_price: max_price.value,
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+   }
+
+   const toggleCategory =(categoryId)=>{
+        const index = selectedCategories.value.indexOf(categoryId);
+
+        if (index === -1) {
+            selectedCategories.value.push(categoryId);
+        } else {
+            selectedCategories.value.splice(index, categoryId);
+        }
+        filterProducts();
+   }
+
+
+   const toggleBrand =(brandId)=>{
+        const index = selectedBrands.value.indexOf(brandId);
+
+        if(index === -1){
+            selectedBrands.value.push(brandId);
+        }else{
+            selectedBrands.value.splice(index,brandId);
+        }
+
+        filterProducts();
+   }
+
+
+    const props = defineProps({
+        products:Array,
+        categories:Array,
+        brands:Array,
+    })
+
+
 </script>
 
 <template>
@@ -11,94 +69,48 @@ import UserLayout from '../../Shared/Frontend/UserLayout.vue';
             <!-- Filters Sidebar -->
             <div class="md:col-span-1 bg-white shadow-md p-4 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Filters</h3>
-
                 <div class="flex-grow max-w-sm my-2">
-                <input type="text" placeholder="Search products..." class="w-full p-2 border rounded-md" />
+                <input type="text" placeholder="Search products..." class="w-full p-2 border rounded-md" v-on:keyup="filterProducts" v-model="search" />
                 </div>
 
                 <!-- Category Filter -->
                 <div class="mb-4">
                 <h4 class="text-sm font-semibold mb-2">Category</h4>
-                <div class="space-y-2">
+                <div v-for="(category,index) in categories" :key="index" class="space-y-2">
                     <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Electronics</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Clothing</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Home Appliances</span>
+                        <input @change="toggleCategory(category.id)" type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
+                        <span>{{ category.name }}</span>
                     </label>
                 </div>
                 </div>
+
                 <!-- Brand Filter -->
                 <div class="mb-4">
-                <h4 class="text-sm font-semibold mb-2">Brand</h4>
+                <h4 class="text-sm font-semibold mb-2">Brand</h4> 
                 <div class="space-y-2">
-                    <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Samsung</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Apple</span>
-                    </label>
-                    <label class="flex items-center space-x-2">
-                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
-                    <span>Nike</span>
+                    <label v-for="(brand,index) in brands" :key="index" class="flex items-center space-x-2">
+                        <input  @change="toggleBrand(brand.id)" type="checkbox" class="form-checkbox h-4 w-4 text-blue-500">
+                        <span>{{ brand.name }}</span>
                     </label>
                 </div>
                 </div>
+
+
                 <!-- Price Range Filter -->
                 <div>
                 <h4 class="text-sm font-semibold mb-2">Price Range</h4>
                 <div class="flex space-x-2">
-                    <input type="number" placeholder="Min" class="w-full p-2 border rounded-md">
-                    <input type="number" placeholder="Max" class="w-full p-2 border rounded-md">
+                    <input  v-model="min_price" type="number" placeholder="Min" class="w-full p-2 border rounded-md">
+                    <input  v-model="max_price" type="number" placeholder="Max" class="w-full p-2 border rounded-md">
                 </div>
                 </div>
-                <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md w-full">Apply Filters</button>
+                <button @click="filterProducts" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md w-full">Apply Filters</button>
             </div>
 
             <!-- Product Grid -->
             <div class="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Product Card -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="https://dummyimage.com/300x200/ffcc00/fff&text=Product+1" alt="Product" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold">Product Name</h3>
-                    <p class="text-gray-600">Description goes here...</p>
-                    <div class="flex items-center mt-2">
-                    <span class="text-red-500 font-bold">$29.99</span>
-                    <span class="text-gray-400 line-through ml-2">$39.99</span>
-                    </div>
-                    <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">New Arrival</span>
-                    <div class="mt-4 flex space-x-2">
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Add to Cart</button>
-                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md">View Details</button>
-                    </div>
-                </div>
-                </div>
-
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="https://dummyimage.com/300x200/ffcc00/fff&text=Product+1" alt="Product" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold">Product Name</h3>
-                    <p class="text-gray-600">Description goes here...</p>
-                    <div class="flex items-center mt-2">
-                    <span class="text-red-500 font-bold">$29.99</span>
-                    <span class="text-gray-400 line-through ml-2">$39.99</span>
-                    </div>
-                    <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">New Arrival</span>
-                    <div class="mt-4 flex space-x-2">
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Add to Cart</button>
-                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md">View Details</button>
-                    </div>
-                </div>
-                </div>
+                <ProductCard v-for="(product, index) in products" :key="index" :product="product"/>
                 <!-- Repeat for other products -->
             </div>
             

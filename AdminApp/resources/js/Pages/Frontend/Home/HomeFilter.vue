@@ -23,7 +23,7 @@ const filterProducts = (filter) => {
   <!-- Horizontal Filter for Remarks -->
   <div class="container mx-auto px-4 py-6">
     <div class="flex space-x-4 overflow-x-auto">
-      <Link href="/" class="px-4 py-2 rounded-full whitespace-nowrap bg-gray-200 ">
+      <Link href="/allproducts" class="px-4 py-2 rounded-full whitespace-nowrap bg-gray-200 ">
         All
       </Link>
       <button @click="filterProducts('special')" :class="{'bg-blue-500 text-white' : currentFilter == 'special', 'bg-gray-200 text-gray-700' : currentFilter !== 'special'}" class="px-4 py-2 rounded-full whitespace-nowrap">

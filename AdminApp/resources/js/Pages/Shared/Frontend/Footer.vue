@@ -10,7 +10,7 @@ import { Link } from '@inertiajs/vue3'
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <h4 class="text-lg font-semibold">Contact Us</h4>
-          <p>Email: support@pandastore.com</p>
+          <p>Email: lutfor251588@gmail.com</p>
           <p>Phone: +123 456 7890</p>
         </div>
         <div>
@@ -23,7 +23,7 @@ import { Link } from '@inertiajs/vue3'
         </div>
         <div>
           <h4 class="text-lg font-semibold">Legal</h4>
-          <a href="#" class="block hover:text-blue-500">Terms & Conditions</a>
+          <a href="www.google.com" class="block hover:text-blue-500">Terms & Conditions</a>
           <a href="#" class="block hover:text-blue-500">Privacy Policy</a>
         </div>
       </div>

@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\AllProductController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Models\ProductDetail;
 
 // Route::redirect("/", '/Dashboard');
@@ -37,4 +38,5 @@ Route::resource('/products', ProductController::class);
 
 Route::resource("/", HomeController::class);
 Route::resource("/allproducts", AllProductController::class);
+Route::resource("/carts", CartController::class);
 Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');

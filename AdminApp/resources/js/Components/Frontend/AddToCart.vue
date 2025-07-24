@@ -19,8 +19,9 @@ onMounted(() => {
         sizes.value = props.product.details.size.split(',');
         selectedSize.value = sizes.value[0]; // Set default size to the first one
     }
+    
     if (props.product.details.color) {
-        colors.value = props.product.details.color.split(',');
+        colors.value = props.product.details.color.split(',').map(s => s.trim());
         selectedColor.value = colors.value[0]; // Set default color to the first one
     }
 });
