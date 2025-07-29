@@ -13,14 +13,18 @@ use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\AllProductController;
 use App\Http\Controllers\Frontend\CartController;
-use App\Models\ProductDetail;
+use App\Http\Controllers\Frontend\UserAuthController;
+
 
 // Route::redirect("/", '/Dashboard');
 
+//=======================Backend Part================================================
+
+//-------------Backend AuthController Start--------------
 Route::get('/login', [AuthController::class,'loginPage']);
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+//-------------Backend AuthController End--------------
 
-//=======================Backend Part================================================
 
 Route::get('/Dashboard',[DashboardController::class,'index'])->name('page.dashboard');
 Route::resource('/settings', SSLCommerzCredentialController::class);
@@ -40,3 +44,14 @@ Route::resource("/", HomeController::class);
 Route::resource("/allproducts", AllProductController::class);
 Route::resource("/carts", CartController::class);
 Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+
+//---------------------UserAuthController Start---------------------------------------------
+Route::get('/user/login', [UserAuthController::class, 'loginPage'])->name('login');
+
+Route::get('/user/register', [UserAuthController::class, 'registerPage'])->name('register');
+Route::post('/user/register', [UserAuthController::class, 'registerPost'])->name('register.post');
+
+Route::get('/UserVerify', [UserAuthController::class, 'UserVerifyPage'])->name('UserVerify');
+
+Route::post('/otp/UserVerify', [UserAuthController::class, 'UserOTPVerify'])->name('verify.otp.post');
+//---------------------UserAuthController End---------------------------------------------
