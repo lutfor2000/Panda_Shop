@@ -97,7 +97,37 @@ class UserAuthController extends Controller
     }
 
 
+    public function OtpResend(Request $request){
+        try {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
 
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'Invalid Email');
+            }
+
+            $otp = MailerHelper::sendOtp($user->email);
+
+            $user->otp = $otp;
+            $user->save();
+
+            return redirect()->route('UserVerify', [
+                'email' => $user->email,
+            ])->with('success', ' OTP resent successfully, please check your email');
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+
+    // public function UserLogout(Request $request){
+    //        Auth::logout();
+    //        return redirect('/')->with('success','Logout Successful !');
+    // }
 
 
 }

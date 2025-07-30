@@ -53,7 +53,7 @@
                     </button>
                 </form>
                 <p class="text-center mt-4 text-gray-600">
-                    <Link href="/otp/resend" method="post"  class="text-blue-500 hover:text-blue-700">Resend OTP</Link>
+                    <Link href="/otp/resend" method="post" :data="{'email' : email}"  class="text-blue-500 hover:text-blue-700">Resend OTP</Link>
                 </p>
             </div>
         </div>

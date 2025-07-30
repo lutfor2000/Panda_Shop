@@ -45,6 +45,7 @@ Route::resource("/allproducts", AllProductController::class);
 Route::resource("/carts", CartController::class);
 Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 
+
 //---------------------UserAuthController Start---------------------------------------------
 Route::get('/user/login', [UserAuthController::class, 'loginPage'])->name('login');
 
@@ -54,4 +55,8 @@ Route::post('/user/register', [UserAuthController::class, 'registerPost'])->name
 Route::get('/UserVerify', [UserAuthController::class, 'UserVerifyPage'])->name('UserVerify');
 
 Route::post('/otp/UserVerify', [UserAuthController::class, 'UserOTPVerify'])->name('verify.otp.post');
+Route::post('/otp/resend', [UserAuthController::class, 'OtpResend'])->name('resend.otp.post');
+
+Route::get('/userLogout',[UserAuthController::class,'UserLogout'])->name('user.logout');
+
 //---------------------UserAuthController End---------------------------------------------
