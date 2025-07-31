@@ -2,18 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SSLCommerzCredentialController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
+
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\AllProductController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\UserAuthController;
+use App\Http\Controllers\Frontend\UserDashboardController;
 
 
 // Route::redirect("/", '/Dashboard');
@@ -48,6 +50,7 @@ Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
 
 //---------------------UserAuthController Start---------------------------------------------
 Route::get('/user/login', [UserAuthController::class, 'loginPage'])->name('login');
+Route::post('/user/login/post', [UserAuthController::class, 'loginPost'])->name('login.post');
 
 Route::get('/user/register', [UserAuthController::class, 'registerPage'])->name('register');
 Route::post('/user/register', [UserAuthController::class, 'registerPost'])->name('register.post');
@@ -60,3 +63,13 @@ Route::post('/otp/resend', [UserAuthController::class, 'OtpResend'])->name('rese
 Route::get('/userLogout',[UserAuthController::class,'UserLogout'])->name('user.logout');
 
 //---------------------UserAuthController End---------------------------------------------
+
+Route::middleware(["auth"])->group(function(){
+
+    //---------------------DashboardController Start---------------------------------------------
+    Route::resource("/userdashboards", UserDashboardController::class);
+    //---------------------DashboardController End---------------------------------------------
+    
+});
+
+

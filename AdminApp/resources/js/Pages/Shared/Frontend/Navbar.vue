@@ -44,8 +44,8 @@ const userDropDown = ref(false)
                   <div id="user-dropdown" :class="{ 'hidden': !userDropDown }" class=" z-10 absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
                       <ul class="py-2">
                         <li><a href="/profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a></li>
-                        <li><a href="/dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a></li>
-                        <li><a href="/userLogout" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Logout</a></li>
+                        <li><Link href="/userdashboards" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</Link></li>
+                        <li><Link href="/userLogout" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Logout</Link></li>
                       </ul>
                   </div>
 

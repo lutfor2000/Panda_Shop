@@ -19,6 +19,28 @@ class UserAuthController extends Controller
         return Inertia::render('Frontend/UserAuth/Login');
     }
 
+    public function loginPost(Request $request){ 
+        try {
+            $request->validate([
+                "email" => "required|email",
+                "password" => "required|string|min:8"
+            ]);
+
+            $email = $request->email;
+            $password = $request->password;
+
+            if (!Auth::attempt(["email" => $email, "password" => $password], true)) {
+                return redirect()->back()->with("error", "Invalid credentials");
+            }
+
+            return redirect('/')->with('success', 'Login success');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+    
+
+
     public function registerPage(){
         return Inertia::render('Frontend/UserAuth/Register');
     }
@@ -124,10 +146,10 @@ class UserAuthController extends Controller
     }
 
 
-    // public function UserLogout(Request $request){
-    //        Auth::logout();
-    //        return redirect('/')->with('success','Logout Successful !');
-    // }
+    public function UserLogout(Request $request){
+           Auth::logout();
+           return redirect('/')->with('success','Logout Successful !');
+    }
 
 
 }
