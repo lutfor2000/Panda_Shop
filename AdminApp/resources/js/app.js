@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/vue3'
-import './bootstrap';
+// import './bootstrap';
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 
