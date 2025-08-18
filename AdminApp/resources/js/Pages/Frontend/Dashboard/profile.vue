@@ -1,4 +1,12 @@
 <script setup>
+    import { useForm } from '@inertiajs/vue3';
+    import { ref, defineProps, reactive, onMounted } from 'vue';
+    import { useToast } from 'vue-toastification';
+
+    const props = defineProps({
+        profile: Object,
+        user: Object,
+    });
 
 
 </script>
