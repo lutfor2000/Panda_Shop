@@ -44,8 +44,8 @@ Route::resource('/products', ProductController::class);
 
 Route::resource("/", HomeController::class);
 Route::resource("/allproducts", AllProductController::class);
-Route::resource("/carts", CartController::class);
-Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+
+
 
 
 //---------------------UserAuthController Start---------------------------------------------
@@ -65,10 +65,18 @@ Route::get('/userLogout',[UserAuthController::class,'UserLogout'])->name('user.l
 //---------------------UserAuthController End---------------------------------------------
 
 Route::middleware(["auth"])->group(function(){
-
+    
+    Route::resource("/carts", CartController::class);
     //---------------------DashboardController Start---------------------------------------------
     Route::resource("/userdashboards", UserDashboardController::class);
+
+    Route::post('/profile', [UserDashboardController::class, 'profile'])->name('profile');
+
+    Route::post('/profile/mail', [UserDashboardController::class, 'profileMail'])->name('profile.mail.post');
+
+     Route::post('/profile/password', [UserDashboardController::class, 'profilePassword'])->name('profile.password.post');
     //---------------------DashboardController End---------------------------------------------
+    
     
 });
 
