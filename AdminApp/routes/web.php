@@ -16,6 +16,8 @@ use App\Http\Controllers\Frontend\AllProductController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\UserAuthController;
 use App\Http\Controllers\Frontend\UserDashboardController;
+use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Frontend\CheckoutController;
 
 
 // Route::redirect("/", '/Dashboard');
@@ -23,28 +25,31 @@ use App\Http\Controllers\Frontend\UserDashboardController;
 //=======================Backend Part================================================
 
 //-------------Backend AuthController Start--------------
-Route::get('/login', [AuthController::class,'loginPage']);
+Route::get('/login', [AuthController::class,'loginPage'])->name('login.page');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
 //-------------Backend AuthController End--------------
 
+Route::middleware(['admin','auth'])->group(function(){
+    
+    Route::get('/login/out', [AuthController::class, 'loginOut'])->name('login.out');
 
-Route::get('/Dashboard',[DashboardController::class,'index'])->name('page.dashboard');
-Route::resource('/settings', SSLCommerzCredentialController::class);
+    Route::get('/Dashboard',[DashboardController::class,'index'])->name('page.dashboard');
+    Route::resource('/settings', SSLCommerzCredentialController::class);
 
-Route::resource('/sliders', SliderController::class);
+    Route::resource('/sliders', SliderController::class);
 
-Route::resource('/brands', BrandController::class);
+    Route::resource('/brands', BrandController::class);
 
-Route::resource('/categories', CategoryController::class);
-Route::resource('/products', ProductController::class);
+    Route::resource('/categories', CategoryController::class);
+    Route::resource('/products', ProductController::class);
 
-
+});
 
 //=================Frontend Part============================================================
 
 Route::resource("/", HomeController::class);
 Route::resource("/allproducts", AllProductController::class);
-
 
 
 
@@ -60,24 +65,32 @@ Route::get('/UserVerify', [UserAuthController::class, 'UserVerifyPage'])->name('
 Route::post('/otp/UserVerify', [UserAuthController::class, 'UserOTPVerify'])->name('verify.otp.post');
 Route::post('/otp/resend', [UserAuthController::class, 'OtpResend'])->name('resend.otp.post');
 
-Route::get('/userLogout',[UserAuthController::class,'UserLogout'])->name('user.logout');
 
 //---------------------UserAuthController End---------------------------------------------
 
 Route::middleware(["auth"])->group(function(){
+
+    Route::get('/userLogout',[UserAuthController::class,'UserLogout'])->name('user.logout');
+    
+    Route::resource("/userdashboards", UserDashboardController::class);
     
     Route::resource("/carts", CartController::class);
     //---------------------DashboardController Start---------------------------------------------
-    Route::resource("/userdashboards", UserDashboardController::class);
 
     Route::post('/profile', [UserDashboardController::class, 'profile'])->name('profile');
 
     Route::post('/profile/mail', [UserDashboardController::class, 'profileMail'])->name('profile.mail.post');
 
      Route::post('/profile/password', [UserDashboardController::class, 'profilePassword'])->name('profile.password.post');
-    //---------------------DashboardController End---------------------------------------------
-    
-    
+     //---------------------DashboardController End---------------------------------------------
+
+     //---------------------WishlistController Start---------------------------------------------
+     Route::get('/wishlists', [WishlistController::class, 'WishlistPage'])->name('wishlist.page');
+     
+     
+     //---------------------CheckoutController Start---------------------------------------------
+     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+
 });
 
 

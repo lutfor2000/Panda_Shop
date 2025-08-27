@@ -41,7 +41,7 @@
     <!-- Login Form -->
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
+      <h2 class="text-2xl font-bold mb-6 text-center">Admin Account Login </h2>
       <form @submit.prevent ="login">
         <div class="mb-4">
           <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
