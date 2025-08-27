@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -28,4 +30,15 @@ class AuthController extends Controller
 
     }
 
+    
+    public function loginOut(){
+
+        Auth::logout();
+        return redirect()->route('login.page')->with('success','Logout Successful !');
+
+    }
+
+
 }
+
+

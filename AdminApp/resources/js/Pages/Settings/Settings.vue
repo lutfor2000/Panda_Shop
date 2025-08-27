@@ -70,11 +70,6 @@
                     </div>
     
                     <div class="mb-4">
-                    <label for="currency" class="block text-gray-700 font-bold mb-2">Currency</label>
-                          <input type="text" id="currency" class="w-full p-2 border rounded-md" placeholder="Enter Store ID" required v-model="form.currency">
-                    </div>
-    
-                    <div class="mb-4">
                     <label for="success-url" class="block text-gray-700 font-bold mb-2">Success URL</label>
                     <input type="text" id="success-url" class="w-full p-2 border rounded-md" v-model="form.success_url" placeholder="Enter Success URL (e.g., /payment/success)" required>
                     </div>
