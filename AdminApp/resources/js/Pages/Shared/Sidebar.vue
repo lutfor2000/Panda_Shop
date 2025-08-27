@@ -1,14 +1,17 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3'
+    import { Link,usePage } from '@inertiajs/vue3'
+
+    
 
 </script>
 
 
 <template>
 
-    <aside class="w-64 bg-gray-800 text-white h-screen fixed">
+    <aside class="w-64 bg-gray-800 text-white h-screen fixed" v-if="usePage().props.auth?.user && usePage().props.auth.user.role === 'admin'">
       <div class="p-4">
         <h3 class="text-xl font-bold mb-6">Admin Panel</h3>
+        <h3 class="text-xl font-bold mb-6">{{ usePage().props.auth.user.name }}</h3>
         <ul class="mt-4 space-y-2">
           <li><Link href="/Dashboard" class="hover:bg-gray-700 p-2 block rounded">Dashboard</Link></li>
           <li><Link href="/sliders" class="hover:bg-gray-700 p-2 block rounded">Slides</Link></li>
@@ -19,6 +22,7 @@
           <li><Link href="/reviews" class="hover:bg-gray-700 p-2 block rounded">Reviews</Link></li>
           <li><Link href="/users" class="hover:bg-gray-700- p-2 block rounded">Users</Link></li>
           <li><Link href="/settings" class="hover:bg-gray-700 p-2 block rounded">Settings</Link></li>
+          <li><Link href="/login/out" class="hover:bg-gray-700 p-2 block rounded">Logout</Link></li>
         </ul>
       </div>
     </aside>
