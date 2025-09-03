@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -87,7 +89,22 @@ class AllProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+       
+        // $id = Crypt::decrypt($id);
+
+        $product = Product::findOrFail($id)->load('category','brand','details');
+
+          $is_on_wishlist = false;
+
+          if(Auth::check() && Auth::user() ){
+                $user = Auth::user();
+                $is_on_wishlist = $user->profile->wishlists->contains('product_id', $product->id);
+          }
+          
+        return Inertia::render('Frontend/AllProducts/ProductDetailsPage',[
+            'product'=>$product,
+            'is_on_wishlist'=>$is_on_wishlist,
+        ]);
     }
 
     /**
