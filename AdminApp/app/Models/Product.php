@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Product extends Model
 {
@@ -10,6 +11,7 @@ class Product extends Model
         'title', 'short_des', 'price', 'is_discount', 'discount_price',
         'image', 'in_stock', 'stock', 'star', 'remark', 'category_id', 'brand_id'
     ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -23,4 +25,5 @@ class Product extends Model
     {
         return $this->hasOne(ProductDetail::class);
     }
+    
 }
