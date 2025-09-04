@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wishlist;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,10 @@ class WishlistController extends Controller
 {
     public function WishlistPage(){
         $user =Auth::user();
-       $wishlist = $user->profile->wishlists->load('product');
+        // $wishlist = $user->profile->wishlists->load('product');
+         $wishlist = $user->profile->wishlists->load(['product', 'product.details']);
+       
+            
         return Inertia::render('Frontend/Wishlists/Wishlists',[
             'wishlists'=> $wishlist,
         ]);

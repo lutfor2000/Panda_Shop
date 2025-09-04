@@ -3,11 +3,13 @@
      import { router } from '@inertiajs/vue3';
      import UserLayout from '../../Shared/Frontend/UserLayout.vue'
      import { useToast } from 'vue-toastification';
+     import AddToCart from '../../../Components/Frontend/AddToCart.vue';
 
      const toast = useToast();
 
      const props = defineProps({
           wishlists: Array,
+          product: Array,
      });
 
      const removeFromWishlist = (id)=>{
@@ -47,7 +49,10 @@
               </span>
 
             </div>
-            <button @click="removeFromWishlist(wishlist.id)" class="text-white hover:scale-105 mt-4 rounded-md bg-red-400 p-1">Remove</button>
+            <div class="flex space-x-2 items-center">
+              <button @click="removeFromWishlist(wishlist.id)" class="text-white hover:scale-105 mt-4 rounded-md bg-red-400 p-2 mb-4">Remove</button>
+              <AddToCart :product="wishlist.product"/>
+            </div>
           </div>
         </div>
 
