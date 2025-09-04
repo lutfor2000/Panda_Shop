@@ -15,12 +15,12 @@ const selectedSize = ref(null);
 const selectedColor = ref(null);
 
 onMounted(() => {
-    if (props.product.details.size) {
+    if (props.product?.details?.size) {
         sizes.value = props.product.details.size.split(',');
         selectedSize.value = sizes.value[0]; // Set default size to the first one
     }
     
-    if (props.product.details.color) {
+    if (props.product?.details?.color) {
         colors.value = props.product.details.color.split(',').map(s => s.trim());
         selectedColor.value = colors.value[0]; // Set default color to the first one
     }
@@ -42,8 +42,8 @@ const addToCart = () => {
             id: props.product.id,
             title: props.product.title,
             price: props.product.is_discount ? props.product.discount_price : props.product.price,
-            image: props.product.image,
-            qty: 1,
+            image: props.product.image ?? props.product.details?.img1,
+            qty: 1, 
             size: selectedSize.value,
             color: selectedColor.value
         });
@@ -54,7 +54,6 @@ const addToCart = () => {
     toast.success('Product added to cart successfully!');
 
 };
-
 
 const showModal = ref(false);
 </script>

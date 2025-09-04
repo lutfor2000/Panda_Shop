@@ -10,6 +10,9 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\ProductReview;
+use App\Models\InvoiceProduct;
+use App\Models\Invoice;
 
 class AllProductController extends Controller
 {
@@ -90,20 +93,40 @@ class AllProductController extends Controller
     public function show(string $id)
     {
        
-        // $id = Crypt::decrypt($id);
+    $product = Product::findOrFail($id)->load('category','brand','details');
+            $related_products = Product::with('details')
+                ->where('category_id', $product->category_id)
+                ->where('id', '!=', $product->id)
+                ->take(4)
+                ->get();
 
-        $product = Product::findOrFail($id)->load('category','brand','details');
+                $reviews = ProductReview::where('product_id', $id)->with('customer')->orderBy('created_at','desc')->get()->map(function($review){
+                    return [
+                        'customer_name' => $review->customer->cus_name,
+                        'description' => $review->description,
+                        'rating' => $review->rating,
+                        'created_at' => $review->created_at->format('Y-m-d'),
+                    ];
+                });
 
-          $is_on_wishlist = false;
+            $is_on_wishlist = false;
+            $can_review = false;
 
-          if(Auth::check() && Auth::user() ){
-                $user = Auth::user();
-                $is_on_wishlist = $user->profile->wishlists->contains('product_id', $product->id);
-          }
+        if(Auth::check() && Auth::user() ){
+            $user = Auth::user();
+            $is_on_wishlist = $user->profile->wishlists->contains('product_id', $product->id);
+
+            // $can_review = InvoiceProduct::whereHas('invoice', function ($query) use ($user) {
+            //     $query->where('customer_id', $user->profile->id)->where('delivery_status', 'Delivered');
+            // })->where('product_id', $product->id)->exists();
+        }
           
         return Inertia::render('Frontend/AllProducts/ProductDetailsPage',[
             'product'=>$product,
             'is_on_wishlist'=>$is_on_wishlist,
+            'related_products'=>$related_products,
+            'reviews'=>$reviews,
+            // 'can_review'=>$can_review,
         ]);
     }
 
@@ -130,4 +153,29 @@ class AllProductController extends Controller
     {
         //
     }
+
+    public function addReview(Request $request){
+      $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'description' => 'required|string|max:200',
+            'rating' => 'required|integer|min:1|max:5',
+      ]);
+
+      $user = Auth::user();
+      $productId = $request->product_id;
+
+      ProductReview::updateOrCreate([
+            'product_id' => $productId,
+            'customer_id' => $user->profile->id],
+    [
+           'description' => $request->description,
+           'rating' => $request->rating
+
+      ]);
+
+      return redirect()->back()->with('success','Review added successfully');
+
+    }
+
+
 }

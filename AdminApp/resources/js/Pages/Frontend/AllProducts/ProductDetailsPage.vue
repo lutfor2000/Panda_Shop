@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, defineProps, ref, computed, onBeforeMount } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
+import { router, usePage,Link } from '@inertiajs/vue3';
 import UserLayout from '../../Shared/Frontend/UserLayout.vue';
 import AddToCart from '../../../Components/Frontend/AddToCart.vue';
+import ProductCard from '../../../Components/Frontend/ProductCard.vue';
 import { useToast } from 'vue-toastification';
 const toast = useToast();
 
@@ -11,6 +12,9 @@ const mainImage =ref(null);
 const props = defineProps({
     product: Object,
     is_on_wishlist: Boolean, 
+    related_products: Object,
+    reviews: Array,
+    can_review: Boolean,
 })
 
 onBeforeMount(() => {
@@ -34,6 +38,33 @@ router.post('/wishlists/post', {
         },
     });
 }
+
+const reviewText = ref('');
+const rating = ref(5);
+
+
+const submitReview = () =>{
+      router.post('/add-review',{
+        product_id : props.product.id,
+        description : reviewText.value,
+        rating : rating.value,
+      },
+      {
+        onSuccess: (page) => {
+            reviewText.value = '';
+            rating.value = 5;
+            page.props.flash.success && toast.success(page.props.flash.success);
+            page.props.flash.error && toast.error(page.props.flash.error);
+        }
+
+      })
+}
+
+// Function to generate star rating display
+const getStarRating = (rating) => {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+};
+
 
 </script>
 
@@ -103,29 +134,29 @@ router.post('/wishlists/post', {
              <div class="mt-8">
                 <h3 class="text-2xl font-bold mb-4">Customer Reviews</h3>
                 <div class="bg-white shadow-md rounded-lg p-4 max-h-96 overflow-y-auto">
-                    <div class="space-y-4 mb-2">
+                    <div class="space-y-4 mb-2" v-for="(review,index) in reviews" :key="index">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <img src="https://dummyimage.com/40x40/000/fff&text=User" alt="Reviewer"
                                     class="h-8 w-8 rounded-full">
                                 <div>
-                                    <p class="font-semibold">cus_name</p>
-                                    <p class="text-sm text-gray-500">Create At</p>
+                                    <p class="font-semibold">{{review.customer_name }}</p>
+                                    <p class="text-sm text-gray-500">{{ review.created_at  }}</p>
                                 </div>
                             </div>
-                            <span class="text-yellow-400 text-lg">Review Reting</span>
+                            <span class="text-yellow-400 text-lg">{{ getStarRating(review.rating) }}</span>
                         </div>
                         <p class="text-gray-600">
-                            Review Disc
+                             {{ review.description }}
                         </p>
                     </div>
                 </div>
                 <div class="mt-8">
                     <h3 class="text-2xl font-bold mb-4">Leave a Review</h3>
-                    <form  class="bg-white shadow-md rounded-lg p-4">
+                    <form  @submit.prevent="submitReview" class="bg-white shadow-md rounded-lg p-4">
                         <div class="mb-4">
                             <label for="review" class="block text-gray-700 font-bold mb-2">Your Review</label>
-                            <textarea id="review"  rows="4" class="w-full p-2 border rounded-md"
+                            <textarea id="review" v-model="reviewText" rows="4" class="w-full p-2 border rounded-md"
                                 placeholder="Write your review here..."></textarea>
                         </div>
                         <div class="mb-4">
@@ -155,9 +186,10 @@ router.post('/wishlists/post', {
                 <h3 class="text-2xl font-bold mb-6">Related Products</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- <ProductCard v-for="(product, index) in props.related_products" :key="index" :product="product" /> -->
+                     <ProductCard v-for="(product, index) in props.related_products" :key="index"  :product="product"/>
                 </div>
                 <div class="text-center mt-8">
-                    <Link href="/products" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200">
+                    <Link href="/allproducts" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200">
                         View All Products
                     </Link>
                 </div>

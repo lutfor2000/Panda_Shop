@@ -88,6 +88,8 @@ Route::middleware(["auth"])->group(function(){
      Route::get('/wishlists', [WishlistController::class, 'WishlistPage'])->name('wishlist.page');
      Route::post('/wishlists/post', [WishlistController::class, 'WishlistPost'])->name('wishlist.post');
      Route::delete('/wishlists/delete/{id}', [WishlistController::class, 'WishlistDelete'])->name('WishlistDelete');
+
+       Route::post('/add-review', [AllProductController::class, 'addReview'])->name('review.post');
      
      
      //---------------------CheckoutController Start---------------------------------------------

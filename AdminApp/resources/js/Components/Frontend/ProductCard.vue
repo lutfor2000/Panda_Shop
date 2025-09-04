@@ -16,7 +16,7 @@ const props = defineProps({
 <template>
    
       <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <img :src="product.image" alt="Product"
+        <img :src=" '/'+ product.image" alt="Product"
           class="w-full h-48 object-cover" />
         <div class="p-4">
           <h3 class="text-lg font-semibold">{{ product.title }}</h3>
@@ -34,7 +34,7 @@ const props = defineProps({
            <div class="flex space-x-2 mt-4">
                 <AddToCart :product="product"/>
 
-                <Link :href="`allproducts/${product.id}`" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+                <Link :href="`/allproducts/${product.id}`" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
                     View Details
                 </Link>
             </div>
