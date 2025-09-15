@@ -22,12 +22,13 @@ class InvoiceHelper {
         $path = 'invoices/' . $fileName;
 
         // PDF save -> storage/app/public/invoices 
-        
+
         Storage::put('public/' . $path, $pdf->output());
 
         return $path;
     }
 
-    
+    //Install-cmd-> composer require barryvdh/laravel-dompdf
+
 
 }
