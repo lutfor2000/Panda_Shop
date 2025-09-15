@@ -100,14 +100,15 @@ class AllProductController extends Controller
                 ->take(4)
                 ->get();
 
-                $reviews = ProductReview::where('product_id', $id)->with('customer')->orderBy('created_at','desc')->get()->map(function($review){
-                    return [
-                        'customer_name' => $review->customer->cus_name,
-                        'description' => $review->description,
-                        'rating' => $review->rating,
-                        'created_at' => $review->created_at->format('Y-m-d'),
-                    ];
-                });
+            $reviews = ProductReview::where('product_id', $id)->with('customer')->orderBy('created_at','desc')->get()->map(function($review){
+                return [
+                    'customer_name' => $review->customer->cus_name,
+                    'description' => $review->description,
+                    'rating' => $review->rating,
+                    'created_at' => $review->created_at->format('Y-m-d'),
+                ];
+            });
+
 
             $is_on_wishlist = false;
             $can_review = false;
@@ -116,6 +117,7 @@ class AllProductController extends Controller
             $user = Auth::user();
             $is_on_wishlist = $user->profile->wishlists->contains('product_id', $product->id);
 
+    
             // $can_review = InvoiceProduct::whereHas('invoice', function ($query) use ($user) {
             //     $query->where('customer_id', $user->profile->id)->where('delivery_status', 'Delivered');
             // })->where('product_id', $product->id)->exists();

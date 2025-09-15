@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Invoice;
+use Illuminate\Support\Facades\Storage;
+use App\Helpers\InvoiceHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,11 +21,110 @@ class UserDashboardController extends Controller
     {
         $user = Auth::user();
         $profile = $user->profile;
+
+          $orders = Invoice::where('customer_id', $profile->id)->orderBy('created_at', 'desc')->get()->map(function ($invoice) {
+            return [
+                'id' => $invoice->id,
+                'order_number' => '#' . $invoice->id,
+                'date' => $invoice->created_at->format('Y-m-d'),
+                'amount' => number_format($invoice->payable, 2),
+                'payment_status' => $invoice->payment_status,
+                'delivery_status' => $invoice->delivery_status,
+                'customer_details' => json_decode($invoice->cus_details, true),
+                'shipping_details' => json_decode($invoice->ship_details, true),
+                'products' => $invoice->products->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'title' => $product->product->title,
+                        'quantity' => $product->quantity,
+                        'size' => $product->size,
+                        'color' => $product->color,
+                        'price' => number_format($product->price, 2),
+                        'total' => number_format($product->price * $product->quantity, 2),
+                    ];
+                })
+            ];
+        });
+
         return Inertia::render('Frontend/Dashboard/UserDashboard', [
             'user' => $user,
-            'profile' => $profile
+            'profile' => $profile,
+            'orders' => $orders,
         ]);
     }
+
+
+    public function orderDetails($id){
+        $user = Auth::user();
+        $invoice = Invoice::where('customer_id', $user->profile->id)->where('id', $id)->firstOrFail();
+
+        $orderDetails = [
+            'id' => $invoice->id,
+            'order_number' => '#' . $invoice->id,
+            'date' => $invoice->created_at->format('Y-m-d'),
+            'amount' => number_format($invoice->payable, 2),
+            'payment_status' => $invoice->payment_status,
+            'delivery_status' => $invoice->delivery_status,
+            'customer_details' => json_decode($invoice->cus_details, true),
+            'shipping_details' => json_decode($invoice->ship_details, true),
+            'products' => $invoice->products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->product->title,
+                    'quantity' => $product->quantity,
+                    'size' => $product->size,
+                    'color' => $product->color,
+                   'image' => $product->product->image,
+                    'price' => number_format($product->product->discount_price, 2),
+                    'total' => number_format($product->product->discount_price * $product->quantity, 2),
+                ];
+            }),
+        ];
+
+       return Inertia::render('OrderDetails',[
+        'order' => $orderDetails
+       ]);
+    }
+
+    
+  //============User Pdf File Download Pard Start=================================
+    public function downloadInvoice($id){
+        $user = Auth::user();
+        $invoice = Invoice::where('customer_id', $user->profile->id)->where('id', $id)->firstOrFail();
+
+        $orderDetails = [
+            'id' => $invoice->id,
+            'order_number' => '#' . $invoice->id,
+            'date' => $invoice->created_at->format('Y-m-d'),
+            'amount' => number_format($invoice->payable, 2),
+            'payment_status' => $invoice->payment_status,
+            'delivery_status' => $invoice->delivery_status,
+            'customer_details' => json_decode($invoice->cus_details, true),
+            'shipping_details' => json_decode($invoice->ship_details, true),
+            'products' => $invoice->products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'title' => $product->product->title,
+                    'quantity' => $product->quantity,
+                    'size' => $product->size,
+                    'color' => $product->color,
+                    'price' => number_format($product->price, 2),
+                    'total' => number_format($product->price * $product->quantity, 2),
+                ];
+            }),
+        ];
+
+    // Generate PDF using InvoiceHelper
+    $path = InvoiceHelper::generatePDF($orderDetails);
+
+    // Download PDF
+    return Storage::download('public/' . $path, 'invoice-' . $invoice->id . '.pdf');
+
+    }
+
+//============User Pdf Download Pard Start=================================
+
+
 
     public function profile(Request $request){
         $request->validate([
@@ -67,7 +169,7 @@ class UserDashboardController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully');
-
+        
     }
 
     public function profileMail(Request $request){

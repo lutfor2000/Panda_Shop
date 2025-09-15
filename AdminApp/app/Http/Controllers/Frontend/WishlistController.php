@@ -17,7 +17,6 @@ class WishlistController extends Controller
         $user =Auth::user();
         // $wishlist = $user->profile->wishlists->load('product');
          $wishlist = $user->profile->wishlists->load(['product', 'product.details']);
-       
             
         return Inertia::render('Frontend/Wishlists/Wishlists',[
             'wishlists'=> $wishlist,

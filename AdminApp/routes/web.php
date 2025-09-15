@@ -81,7 +81,10 @@ Route::middleware(["auth"])->group(function(){
 
     Route::post('/profile/mail', [UserDashboardController::class, 'profileMail'])->name('profile.mail.post');
 
-     Route::post('/profile/password', [UserDashboardController::class, 'profilePassword'])->name('profile.password.post');
+    Route::post('/profile/password', [UserDashboardController::class, 'profilePassword'])->name('profile.password.post');
+
+    Route::get('/order/{id}', [UserDashboardController::class, 'orderDetails'])->name('order.details');
+    Route::get('/order/{id}/invoice', [UserDashboardController::class, 'downloadInvoice'])->name('order.details');
      //---------------------DashboardController End---------------------------------------------
 
      //---------------------WishlistController Start---------------------------------------------
@@ -89,11 +92,14 @@ Route::middleware(["auth"])->group(function(){
      Route::post('/wishlists/post', [WishlistController::class, 'WishlistPost'])->name('wishlist.post');
      Route::delete('/wishlists/delete/{id}', [WishlistController::class, 'WishlistDelete'])->name('WishlistDelete');
 
-       Route::post('/add-review', [AllProductController::class, 'addReview'])->name('review.post');
+    Route::post('/add-review', [AllProductController::class, 'addReview'])->name('review.post');
+
+   
      
      
      //---------------------CheckoutController Start---------------------------------------------
      Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+     Route::get('/payment-methods', [CheckoutController::class, 'paymentMethods'])->name('payment.methods');
 
 });
 
