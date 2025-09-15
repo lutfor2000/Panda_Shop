@@ -6,23 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class InvoiceProduct extends Model
 {
-     protected $fillable = [
-        'total', 'vat', 'payable', 'cus_details', 'ship_details',
-        'tran_id', 'val_id', 'delivery_status', 'payment_status', 'customer_id'
-    ];
+     protected $fillable = ['quantity', 'price', 'size', 'color', 'product_id', 'invoice_id'];
 
-    protected $casts = [
-        'cus_details' => 'array',
-        'ship_details' => 'array',
-    ];
-
-    public function customer()
+    public function product()
     {
-        return $this->belongsTo(CustomerProfile::class, 'customer_id', 'id');
+        return $this->belongsTo(Product::class);
     }
 
-    public function products()
-    {
-        return $this->hasMany(InvoiceProduct::class);
+    public function invoice(){
+        return $this->belongsTo(Invoice::class);
     }
 }
