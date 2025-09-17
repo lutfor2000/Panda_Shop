@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -43,6 +44,11 @@ Route::middleware(['admin','auth'])->group(function(){
 
     Route::resource('/categories', CategoryController::class);
     Route::resource('/products', ProductController::class);
+
+     Route::resource('/orders', OrderController::class);
+     // routes/web.php
+    Route::get('/order/{id}/print', [OrderController::class, 'print'])->name('orders.print');
+
 
 });
 
@@ -85,6 +91,7 @@ Route::middleware(["auth"])->group(function(){
 
     Route::get('/order/{id}', [UserDashboardController::class, 'orderDetails'])->name('order.details');
     Route::get('/order/{id}/invoice', [UserDashboardController::class, 'downloadInvoice'])->name('order.details');
+    Route::delete('/order/delete/{id}', [UserDashboardController::class, 'DeleteInvoice'])->name('order.delete');
      //---------------------DashboardController End---------------------------------------------
 
      //---------------------WishlistController Start---------------------------------------------

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\InvoiceProduct;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\InvoiceHelper;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,10 @@ class UserDashboardController extends Controller
     {
         $user = Auth::user();
         $profile = $user->profile;
+
+        if (!$profile) {
+            return Inertia::render('Frontend/Dashboard/UserDashboard',);
+         }
 
           $orders = Invoice::where('customer_id', $profile->id)->orderBy('created_at', 'desc')->get()->map(function ($invoice) {
             return [
@@ -87,7 +92,7 @@ class UserDashboardController extends Controller
     }
 
     
-  //============User Pdf File Download Pard Start=================================
+  //============User Pdf File Download Part Start=================================
     public function downloadInvoice($id){
         $user = Auth::user();
         $invoice = Invoice::where('customer_id', $user->profile->id)->where('id', $id)->firstOrFail();
@@ -122,7 +127,21 @@ class UserDashboardController extends Controller
 
     }
 
-//============User Pdf Download Pard Start=================================
+//============User Pdf Download Part End=================================
+
+//============User Pdf DeleteInvoice Part Start=================================
+
+    public function DeleteInvoice($id){
+
+        $invoice = Invoice::find($id);
+        $InvoiceProduct = InvoiceProduct::where('invoice_id', $invoice->id);
+                       
+        $InvoiceProduct->delete();
+        $invoice->delete(); 
+
+         return redirect()->back()->with('success', 'Invoice Delete successfully');
+    }
+
 
 
 

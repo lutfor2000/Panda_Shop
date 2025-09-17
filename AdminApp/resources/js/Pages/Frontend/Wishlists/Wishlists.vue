@@ -1,6 +1,6 @@
 <script setup>
      import { onMounted, defineProps } from 'vue';
-     import { router } from '@inertiajs/vue3';
+     import { router,usePage } from '@inertiajs/vue3';
      import UserLayout from '../../Shared/Frontend/UserLayout.vue'
      import { useToast } from 'vue-toastification';
      import AddToCart from '../../../Components/Frontend/AddToCart.vue';
@@ -29,7 +29,7 @@
 
   <UserLayout>
         <!-- Wishlist Content -->
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8" v-if="usePage().props.auth?.user && usePage().props.auth.user.role === 'user'">
       <h2 class="text-2xl font-bold mb-6">Wishlist</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
@@ -59,6 +59,11 @@
         <!-- Repeat for other wishlist items -->
       </div>
     </div>
+
+     <div  class="ml-64 p-8" v-else-if="usePage().props.auth.user.role === 'admin'"">
+            <h2 class="text-2xl font-bold mb-6 text-blue-500">this is the admin dashboard</h2>
+            <p class="text-gray-700">You do not have permission to view this page.</p>
+      </div>
   </UserLayout>
   
 </template>

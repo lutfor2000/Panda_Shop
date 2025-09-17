@@ -3,6 +3,12 @@ import { router } from '@inertiajs/vue3'
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 
+//========fortawesome Add=========
+import '@fortawesome/fontawesome-free/css/all.css';
+import '@fortawesome/fontawesome-free/js/all.js';
+
+
+
 //----toastification---->
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";

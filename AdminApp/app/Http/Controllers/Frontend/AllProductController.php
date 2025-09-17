@@ -128,7 +128,7 @@ class AllProductController extends Controller
             'is_on_wishlist'=>$is_on_wishlist,
             'related_products'=>$related_products,
             'reviews'=>$reviews,
-            // 'can_review'=>$can_review,
+            'can_review'=>$can_review,
         ]);
     }
 

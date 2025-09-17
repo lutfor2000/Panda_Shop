@@ -16,7 +16,8 @@ const columns = [
     { key: 'image', label: 'Image', slot: 'image-slot', searchable: false },
     { key: 'title', label: 'Title', searchable: true, sortable: true },
     { key: 'price', label: 'Price', searchable: false, sortable: true },
-    { key: 'category', label: 'Category', slot: 'category-slot', searchable: true, sortable: true },
+    { key: 'stock', label: 'Stock', searchable: false, sortable: true },
+    { key: 'category', label: 'Category', slot: 'category-slot', searchale: true, sortable: true },
     { key: 'brand', label: 'Brand', slot: 'brand-slot', searchable: true, sortable: true },
     { key: 'actions', label: 'Actions', slot: 'actions-slot', searchable: false },
 ];

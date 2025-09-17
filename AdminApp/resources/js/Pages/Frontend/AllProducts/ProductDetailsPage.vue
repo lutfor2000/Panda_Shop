@@ -151,8 +151,8 @@ const getStarRating = (rating) => {
                         </p>
                     </div>
                 </div>
-                <div class="mt-8">
-                    <h3  v-if="props.can_review" class="text-2xl font-bold mb-4">Leave a Review</h3>
+                <div class="mt-8" >
+                    <h3  class="text-2xl font-bold mb-4">Leave a Review</h3>
                     <form  @submit.prevent="submitReview" class="bg-white shadow-md rounded-lg p-4">
                         <div class="mb-4">
                             <label for="review" class="block text-gray-700 font-bold mb-2">Your Review</label>

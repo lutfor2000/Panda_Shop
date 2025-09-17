@@ -14,10 +14,15 @@ use Illuminate\Support\Facades\Auth;
 class WishlistController extends Controller
 {
     public function WishlistPage(){
+
         $user =Auth::user();
-        // $wishlist = $user->profile->wishlists->load('product');
-         $wishlist = $user->profile->wishlists->load(['product', 'product.details']);
-            
+
+        // if (!$user->profile) {
+        //     return redirect()->route('login');
+        // }
+
+        $wishlist = $user->profile->wishlists->load(['product', 'product.details']);
+
         return Inertia::render('Frontend/Wishlists/Wishlists',[
             'wishlists'=> $wishlist,
         ]);

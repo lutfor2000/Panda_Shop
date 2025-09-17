@@ -1,6 +1,11 @@
 <script setup>
     import UserLayout from '../../Shared/Frontend/UserLayout.vue';
     import Profile from './profile.vue';
+    import { router,usePage  } from '@inertiajs/vue3';
+
+    import { useToast } from 'vue-toastification';
+    const toast = useToast();
+
 
     const props = defineProps({
         profile: Object,
@@ -8,6 +13,15 @@
         orders: Array,
        
     })
+
+    const invoiceDelete = (id)=>{
+         router.delete(`/order/delete/${id}`,{
+         onSuccess: (page) => {
+                page.props.flash.success && toast.success(page.props.flash.success);
+                page.props.flash.error && toast.error(page.props.flash.error);
+            },
+      })
+    }
 
     const getStatusColor = (status) => {
     switch (status) {
@@ -54,7 +68,7 @@ const getStatusText = (status) => {
 
 <template>
     <UserLayout>
-        <div class="py-12">
+        <div class="py-12" v-if="usePage().props.auth?.user?.role === 'user'">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
                 <Profile :profile="profile" :user="user" />
@@ -90,9 +104,12 @@ const getStatusText = (status) => {
                                             </span>
                                     </td>
                                     <td class="p-3">
-                                        <a :href="`/order/${order.id}`" class="text-blue-500 hover:text-blue-700">
-                                            View Details
+                                        <a :href="`/order/${order.id}`" class="text-green-500 hover:text-blue-700">
+                                             <i class="fa-solid fa-eye-slash"></i>
                                         </a>
+                                        <button  @click="invoiceDelete(order.id)" class="text-red-500 ml-3 hover:text-blue-700">
+                                           <i class="fa-solid fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -102,6 +119,11 @@ const getStatusText = (status) => {
                 </div>
                 
             </div>
+        </div>
+
+         <div  class="ml-64 p-8" v-else>
+            <h2 class="text-2xl font-bold mb-6 text-blue-500">this is the User dashboard</h2>
+            <p class="text-gray-700">You do not have permission to view this page.</p>
         </div>
     </UserLayout>
 </template>

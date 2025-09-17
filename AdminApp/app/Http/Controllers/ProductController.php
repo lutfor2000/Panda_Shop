@@ -21,6 +21,7 @@ class ProductController extends Controller
                     'title' => $product->title,
                     'image' => $product->image,
                     'price' => $product->price,
+                    'stock' => $product->stock,
                     'category_name' => $product->category->name ?? null,
                     'brand_name' => $product->brand->name ?? null,
                     'encrypted_id' => Crypt::encrypt($product->id),
